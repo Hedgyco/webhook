@@ -24,8 +24,8 @@ handler.on('push', function (event) {
     event.payload.repository.name,
     event.payload.ref)
   if(!is_handled) {
-    child = spawn('salt', ['"qa"', 'state.apply', 'qa.git']);
-    
+    child = spawn('salt', ['qa', 'state.apply', 'qa.git']);
+
     child.stdout.on('data', function(chunk) {
       console.log('stdout: ' + chunk);
     });
