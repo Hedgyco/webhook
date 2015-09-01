@@ -24,8 +24,7 @@ handler.on('push', function (event) {
     event.payload.repository.name,
     event.payload.ref)
   if(!is_handled) {
-    child = spawn('salt', ['qa', 'state.apply', 'qa.git']);
-
+    child = spawn('salt-run', ['fileserver.update'])
     child.stdout.on('data', function(chunk) {
       console.log('stdout: ' + chunk);
     });
@@ -33,6 +32,10 @@ handler.on('push', function (event) {
       console.log('stderr: ' + data);
     });
     child.on('close', function(code) {
+      child = spawn('salt', ['qa', 'state.apply', 'qa.git']);
+      child.stdout.on('data', function(chunk) {
+        console.log('stdout: ' + chunk);
+      });
       console.log('closing code: ' + code);
     });
   }
