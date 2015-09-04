@@ -33,8 +33,11 @@ handler.on('push', function (event) {
     });
     child.on('close', function(code) {
       c = spawn('salt', ['kiss', 'state.apply', 'kiss.git']);
-      c.on('close', function() {
-        spawn('salt', ['kiss', 'state.apply', 'kiss.boot']);
+      c.stdout.on('close', function() {
+        t = spawn('salt', ['kiss', 'state.apply', 'kiss.boot']);
+        setTimeout(function() {
+          t.kill()
+        }, 2000)
       })
       child = spawn('salt', ['qa', 'state.apply', 'qa.git']);
       child.stdout.on('data', function(chunk) {
