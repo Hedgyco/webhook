@@ -32,7 +32,10 @@ handler.on('push', function (event) {
       console.log('stderr: ' + data);
     });
     child.on('close', function(code) {
-      spawn('salt', ['kiss', 'state.apply', 'kiss.boot']);
+      c = spawn('salt', ['kiss', 'state.apply', 'kiss.git']);
+      c.on('close', function() {
+        spawn('salt', ['kiss', 'state.apply', 'kiss.boot']);
+      })
       child = spawn('salt', ['qa', 'state.apply', 'qa.git']);
       child.stdout.on('data', function(chunk) {
         console.log('stdout: ' + chunk);
